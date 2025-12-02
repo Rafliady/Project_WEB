@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKPI</title>
+    <title>SKPI - Sistem Kepuasan Pelayanan</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -51,60 +51,27 @@
         /* Cards & Layout */
         .card { background: var(--card); padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); text-align: center; }
 
-        /* FULL SCREEN BACKGROUND (HALAMAN AWAL) */
+        /* FULL SCREEN BACKGROUND */
         .full-screen-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Pastikan file gambar ada di folder yang sama */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('kantor imigrasi.jpg'); 
-            background-size: cover;
-            background-position: center;
-            z-index: -1; /* Di belakang semua konten */
+            background-size: cover; background-position: center; z-index: -1;
         }
         
-        .hero-title { 
-            font-size: 3rem; 
-            margin-bottom: 15px; 
-            font-weight: 800; 
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-        .hero-desc { 
-            font-size: 1.2rem; 
-            color: rgba(255, 255, 255, 0.9); 
-            text-align: center;
-            margin-bottom: 3rem; 
-            max-width: 700px; 
-            margin-left: auto; 
-            margin-right: auto; 
-        }
+        .hero-title { font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center; }
+        .hero-desc { font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); text-align: center; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
         
         .login-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2.5rem;
-            max-width: 450px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
-            color: var(--text);
+            background: white; border-radius: 16px; padding: 2.5rem; max-width: 450px; margin: 0 auto;
+            position: relative; z-index: 10; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); color: var(--text);
         }
 
         /* Forms */
-        input, select {
-            width: 100%; padding: 12px 16px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.2s;
-        }
+        input, select { width: 100%; padding: 12px 16px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.2s; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
         /* Buttons */
-        .btn {
-            background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 600; transition: 0.2s;
-        }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 600; transition: 0.2s; }
         .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
         .btn-outline:hover { background: #eef2ff; }
@@ -124,16 +91,13 @@
             position: relative; overflow: hidden;
         }
         .employee-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        
         .role-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; }
         .employee-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; background: #e0e7ff; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .emp-name { font-weight: 700; display: block; color: var(--text); margin-bottom: 2px; }
 
         /* Pagination */
         .pagination { display: flex; justify-content: center; gap: 5px; margin-top: 30px; }
-        .page-btn {
-            width: 40px; height: 40px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 600; transition: 0.2s;
-        }
+        .page-btn { width: 40px; height: 40px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 600; transition: 0.2s; }
         .page-btn:hover { border-color: var(--primary); color: var(--primary); }
         .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -146,79 +110,45 @@
         .rating-emoji { font-size: 1.8rem; margin-right: 15px; }
         .rating-text { font-weight: 600; font-size: 1.1rem; }
 
-        /* CUSTOM MODALS STYLE (ALERT & CONFIRM) */
-        .custom-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: none;
-            align-items: center; justify-content: center; z-index: 200;
-            backdrop-filter: blur(3px);
-        }
-        .custom-modal-box {
-            background: white; padding: 30px; border-radius: 16px;
-            width: 90%; max-width: 400px; text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* VARIASI WARNA MODAL */
+        /* CUSTOM MODALS */
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(3px); }
+        .custom-modal-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
         .custom-modal-box.success-modal { background: #22c55e; color: white; }
         .custom-modal-box.success-modal h3, .custom-modal-box.success-modal p { color: white !important; }
         .custom-modal-box.success-modal .btn { background: white; color: #22c55e; font-weight: bold; }
-
         .custom-modal-box.error-modal { background: #ef4444; color: white; }
         .custom-modal-box.error-modal h3, .custom-modal-box.error-modal p { color: white !important; }
         .custom-modal-box.error-modal .btn { background: white; color: #ef4444; font-weight: bold; }
-
-        /* ICON ANIMATIONS */
         .custom-modal-icon { font-size: 4rem; margin-bottom: 10px; display: block; }
         
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-20px);}
-            60% {transform: translateY(-10px);}
-        }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
         .icon-bounce { animation: bounce 1.5s infinite; }
-
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
         .icon-shake { animation: shake 0.5s infinite; }
-
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         /* Admin Dashboard UI */
-        .admin-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); 
-            display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px);
-        }
+        .admin-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px); }
         .modal-content { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-
         .tabs { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; overflow-x: auto; }
         .tab-btn { padding: 12px 20px; background: none; border: none; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; padding: 12px; background: #f8fafc; color: var(--text-light); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        th { text-align: left; padding: 12px; background: #f8fafc; color: var(--text-light); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
         .rank-num { font-weight: bold; width: 30px; height: 30px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
         .rank-1 .rank-num { background: #fef08a; color: #854d0e; }
         .rank-2 .rank-num { background: #e2e8f0; color: #475569; }
         .rank-3 .rank-num { background: #fed7aa; color: #9a3412; }
-
         .text-center { text-align: center; }
-        .hidden { display: none; }
+        
+        /* Utility untuk view admin */
+        .admin-view { display: none; }
+        .admin-view.active-view { display: block; animation: fadeIn 0.3s; }
+        
+        .history-date { font-size: 0.8rem; color: #64748b; }
+        .history-phone { font-size: 0.85rem; color: #4f46e5; }
     </style>
 </head>
 <body>
@@ -231,7 +161,6 @@
         </div>
     </nav>
 
-    <!-- MODAL PASSWORD ADMIN -->
     <div id="adminModal" class="admin-modal">
         <div class="modal-content">
             <h3>Login Admin</h3>
@@ -242,7 +171,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM ALERT MODAL -->
     <div id="customAlert" class="custom-modal-overlay">
         <div id="alertBox" class="custom-modal-box">
             <span id="alertIcon" class="custom-modal-icon">🔔</span>
@@ -252,7 +180,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM CONFIRM MODAL -->
     <div id="customConfirm" class="custom-modal-overlay">
         <div class="custom-modal-box">
             <span class="custom-modal-icon" style="font-size:3rem;">⚠️</span>
@@ -267,16 +194,11 @@
 
     <div class="container">
         
-        <!-- HALAMAN 1: HERO & LOGIN -->
         <div id="page-login" class="page active">
-            <!-- Background Full Screen -->
             <div class="full-screen-bg"></div>
-
-            <!-- Konten Halaman Login -->
             <div style="padding-top: 4rem;">
                 <h1 class="hero-title">Survei Kepuasan Pegawai Imigrasi</h1>
                 <p class="hero-desc">Ayo turut berperan dalam meningkatkan kinerja pegawai Imigrasi. Isi Survei Penilaian Pegawai untuk pelayanan yang lebih baik. Isi Survei Sekarang!</p>
-                
                 <div class="login-card">
                     <h3 class="text-center" style="margin-top:0;">Isi Data Pemohon</h3>
                     <p class="text-center" style="color:var(--text-light); font-size:0.9rem;">Data Anda rahasia dan hanya untuk keperluan validasi.</p>
@@ -289,13 +211,11 @@
             </div>
         </div>
 
-        <!-- HALAMAN 2: DAFTAR PEGAWAI -->
         <div id="page-list" class="page">
             <div class="text-center" style="margin-bottom: 25px;">
                 <h3>Halo, <span id="displayName"></span>!</h3>
-                <p style="color:var(--text-light);">Siapa yang melayani Anda hari ini?</p>
+                <p style="color:var(--text-light);">Silakan pilih pegawai untuk dinilai:</p>
             </div>
-
             <div class="toolbar">
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="Cari nama pegawai..." oninput="handleSearch()">
@@ -306,58 +226,34 @@
                     </select>
                 </div>
             </div>
-
-            <div id="employeeContainer" class="employee-grid">
-                <!-- Javascript will populate this -->
-            </div>
-
-            <div id="pagination" class="pagination">
-                <!-- Javascript will populate this -->
-            </div>
-
-            <button onclick="logout()" class="btn btn-outline" style="margin-top: 30px;">Batal / Ganti Akun</button>
+            <div id="employeeContainer" class="employee-grid"></div>
+            <div id="pagination" class="pagination"></div>
+            <button onclick="logout()" class="btn btn-outline" style="margin-top: 30px;">Selesai / Keluar</button>
         </div>
 
-        <!-- HALAMAN 3: PENILAIAN -->
         <div id="page-rate" class="page">
             <div class="card" style="max-width: 600px; margin: 0 auto;">
                 <button onclick="showPage('page-list')" style="float:left; background:none; border:none; cursor:pointer; font-size:1.5rem;">⬅️</button>
-                
                 <img id="rate-img" src="" class="employee-img" style="width: 120px; height: 120px;">
                 <h2 id="rate-name" style="margin-bottom: 5px;">Nama</h2>
                 <span id="rate-role" class="role-tag" style="font-size: 1rem;">Jabatan</span>
-                
                 <hr style="border:0; border-top:1px solid #e2e8f0; margin: 25px 0;">
-                
                 <p style="font-weight:600; font-size:1.1rem;">Bagaimana pelayanan pegawai ini?</p>
-                
                 <div class="rating-container">
-                    <div class="rating-option" onclick="selectRate(5, this)">
-                        <span class="rating-emoji">🤩</span> <span class="rating-text">Sangat Baik</span>
-                    </div>
-                    <div class="rating-option" onclick="selectRate(4, this)">
-                        <span class="rating-emoji">😊</span> <span class="rating-text">Baik</span>
-                    </div>
-                    <div class="rating-option" onclick="selectRate(3, this)">
-                        <span class="rating-emoji">😐</span> <span class="rating-text">Cukup</span>
-                    </div>
-                    <div class="rating-option" onclick="selectRate(2, this)">
-                        <span class="rating-emoji">😞</span> <span class="rating-text">Kurang Baik</span>
-                    </div>
-                    <div class="rating-option" onclick="selectRate(1, this)">
-                        <span class="rating-emoji">😡</span> <span class="rating-text">Sangat Buruk</span>
-                    </div>
+                    <div class="rating-option" onclick="selectRate(5, this)"><span class="rating-emoji">🤩</span> <span class="rating-text">Sangat Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(4, this)"><span class="rating-emoji">😊</span> <span class="rating-text">Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(3, this)"><span class="rating-emoji">😐</span> <span class="rating-text">Cukup</span></div>
+                    <div class="rating-option" onclick="selectRate(2, this)"><span class="rating-emoji">😞</span> <span class="rating-text">Kurang Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(1, this)"><span class="rating-emoji">😡</span> <span class="rating-text">Sangat Buruk</span></div>
                 </div>
-
                 <button onclick="submitRating()" class="btn" style="margin-top: 25px;">Kirim Penilaian</button>
             </div>
         </div>
 
-        <!-- HALAMAN 4: ADMIN DASHBOARD -->
         <div id="page-admin" class="page">
             <div class="card" style="text-align: left;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <h2>📊 Dashboard Kinerja</h2>
+                    <h2>📊 Dashboard Admin</h2>
                     <button onclick="askClearData()" class="btn-danger">Reset Semua Data</button>
                 </div>
                 
@@ -365,11 +261,12 @@
                     <button class="tab-btn active" onclick="switchTab('weekly', this)">📅 Mingguan</button>
                     <button class="tab-btn" onclick="switchTab('monthly', this)">🗓️ Bulanan</button>
                     <button class="tab-btn" onclick="switchTab('all', this)">🏆 Hasil Akhir</button>
+                    <button class="tab-btn" onclick="switchTab('history', this)">📜 Riwayat</button>
                 </div>
 
                 <h4 id="rankTitle" style="color:var(--text-light); margin-top:0;">Ranking Mingguan</h4>
                 
-                <div style="overflow-x: auto;">
+                <div id="rankingView" class="admin-view active-view" style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
@@ -383,6 +280,22 @@
                         <tbody id="rankingBody"></tbody>
                     </table>
                 </div>
+
+                <div id="historyView" class="admin-view" style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>Nama Pengunjung</th>
+                                <th>No. HP</th>
+                                <th>Menilai</th>
+                                <th class="text-center">Skor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
+                </div>
+
                 <br>
                 <button onclick="goToHome()" class="btn btn-outline">Keluar dari Admin</button>
             </div>
@@ -391,30 +304,14 @@
     </div>
 
     <script>
-        // --- HELPER UNTUK CUSTOM ALERT/CONFIRM BERWARNA ---
-        let alertCallback = null;
-
-        // type bisa: 'normal', 'success', 'error'
+        // --- HELPER UNTUK CUSTOM ALERT/CONFIRM ---
         function showAlert(message, title="Notifikasi", type="normal", callback=null) {
             const box = document.getElementById('alertBox');
             const icon = document.getElementById('alertIcon');
-            
-            // Reset Class
-            box.className = 'custom-modal-box';
-            icon.className = 'custom-modal-icon';
-
-            // Set Style Berdasarkan Tipe
-            if(type === 'success') {
-                box.classList.add('success-modal');
-                icon.innerText = '🙏';
-                icon.classList.add('icon-bounce'); // Animasi Bounce
-            } else if (type === 'error') {
-                box.classList.add('error-modal');
-                icon.innerText = '❌';
-                icon.classList.add('icon-shake'); // Animasi Shake
-            } else {
-                icon.innerText = '🔔';
-            }
+            box.className = 'custom-modal-box'; icon.className = 'custom-modal-icon';
+            if(type === 'success') { box.classList.add('success-modal'); icon.innerText = '🙏'; icon.classList.add('icon-bounce'); } 
+            else if (type === 'error') { box.classList.add('error-modal'); icon.innerText = '❌'; icon.classList.add('icon-shake'); } 
+            else { icon.innerText = '🔔'; }
 
             document.getElementById('customAlertTitle').innerText = title;
             document.getElementById('customAlertMsg').innerText = message;
@@ -423,38 +320,26 @@
             const btn = document.getElementById('customAlertBtn');
             const newBtn = btn.cloneNode(true);
             btn.parentNode.replaceChild(newBtn, btn);
-            
-            newBtn.onclick = function() {
-                document.getElementById('customAlert').style.display = 'none';
-                if(callback) callback();
-            };
+            newBtn.onclick = function() { document.getElementById('customAlert').style.display = 'none'; if(callback) callback(); };
         }
 
         function showConfirm(message, yesCallback) {
             document.getElementById('customConfirmMsg').innerText = message;
             document.getElementById('customConfirm').style.display = 'flex';
-            
             const btn = document.getElementById('customConfirmYes');
             const newBtn = btn.cloneNode(true);
             btn.parentNode.replaceChild(newBtn, btn);
-
-            newBtn.onclick = function() {
-                document.getElementById('customConfirm').style.display = 'none';
-                if(yesCallback) yesCallback();
-            };
+            newBtn.onclick = function() { document.getElementById('customConfirm').style.display = 'none'; if(yesCallback) yesCallback(); };
         }
+        function closeConfirm() { document.getElementById('customConfirm').style.display = 'none'; }
 
-        function closeConfirm() {
-            document.getElementById('customConfirm').style.display = 'none';
-        }
-
-        // --- DATA PEGAWAI (Sample) ---
+        // --- DATA PEGAWAI ---
         const employees = [
-            { id: 1, name: "Budi Santoso", role: "Customer Service", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=1" },
-            { id: 2, name: "Nina Wati", role: "Customer Service", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=2" },
-            { id: 3, name: "Joko Susilo", role: "Customer Service", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=3" },
-            { id: 4, name: "Rina Sari", role: "Customer Service", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=4" },
-            { id: 5, name: "Dedi Mahendra", role: "Customer Service", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=5" },
+            { id: 1, name: "Nur Atiqotul Zulfa, S.E.", role: "Analis Keimigrasian Ahli Pertama", img: "image/zulfa.png"},
+            { id: 2, name: "Triono, S.H.", role: "Pengelola Data Keimigrasian", img: "image/triono.png" },
+            { id: 3, name: "Deska Reinaldy Akbar, S.H.", role: "Analis Keimigrasian Ahli Pertama", img: "image/deska.png" },
+            { id: 4, name: "Citra Adhi Pradana, S.H.", role: "Pengelola Data Keimigrasian", img: "image/citra.png" },
+            { id: 5, name: "Anang Budi Sulistyo, S.T.", role: "Pengelola Sarana dan Prasarana Kantor", img: "image/anang.png" },
             { id: 6, name: "Siti Aminah", role: "Teller", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=6" },
             { id: 7, name: "Putri Ayu", role: "Teller", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=7" },
             { id: 8, name: "Indah Permata", role: "Teller", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=8" },
@@ -465,19 +350,18 @@
             { id: 13, name: "Eko Wijaya", role: "Security", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=13" },
             { id: 14, name: "Gilang Ramadhan", role: "Security", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=14" },
             { id: 15, name: "Yudi Purnomo", role: "Security", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=15" },
-            { id: 16, name: "Dewi Lestari", role: "Marketing", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=16" },
-            { id: 17, name: "Linda Sari", role: "Marketing", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=17" },
-            { id: 18, name: "Sari Dewi", role: "Marketing", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=18" },
-            { id: 19, name: "Doni Tata", role: "Marketing", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=19" },
-            { id: 20, name: "Andi Saputra", role: "Back Office", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=20" },
-            { id: 21, name: "Fajar Nugraha", role: "Back Office", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=21" },
-            { id: 22, name: "Maya Putri", role: "Manager", img: "https://api.dicebear.com/7.x/avataaars/svg?seed=22" },
+            { id: 16, name: "Sabrina", role: "Marketing", img: "image/sabrina.png" },
+            { id: 17, name: "Rafli", role: "Marketing", img: "image/rafli.png" },
+            { id: 18, name: "Wahyu", role: "Marketing", img: "image/wahyu.png" },
+            { id: 19, name: "Dhana", role: "Marketing", img: "image/dhana.png" },
+            { id: 20, name: "Inez", role: "Pengelola Data Keimigrasian", img: "image/inez.png" },
+            { id: 21, name: "Citra", role: "Pengelola Data Keimigrasian", img: "image/citra2.png" },
+            { id: 22, name: "Rifa`i", role: "Pengelola Sarana dan Prasarana Kantor", img: "image/rifai.png" },
         ];
 
         let currentCust = null;
         let selectedEmp = null;
         let currentScore = 0;
-        let currentScoreText = "";
         let currentPage = 1;
         const itemsPerPage = 12; 
         let currentSearch = "";
@@ -507,18 +391,12 @@
             e.preventDefault();
             const name = document.getElementById('custName').value;
             const phone = document.getElementById('custPhone').value;
-            
             currentCust = { name, phone };
             document.getElementById('displayName').innerText = name;
-            
-            currentPage = 1; 
-            currentSearch = ""; 
-            currentFilter = "";
+            currentPage = 1; currentSearch = ""; currentFilter = "";
             document.getElementById('searchInput').value = "";
             document.getElementById('roleFilter').value = "";
-            
-            renderList();
-            showPage('page-list');
+            renderList(); showPage('page-list');
         });
 
         function logout() {
@@ -532,41 +410,34 @@
             const select = document.getElementById('roleFilter');
             roles.forEach(r => {
                 const opt = document.createElement('option');
-                opt.value = r;
-                opt.innerText = r;
-                select.appendChild(opt);
+                opt.value = r; opt.innerText = r; select.appendChild(opt);
             });
         }
 
         function handleSearch() {
             currentSearch = document.getElementById('searchInput').value.toLowerCase();
             currentFilter = document.getElementById('roleFilter').value;
-            currentPage = 1; 
-            renderList();
+            currentPage = 1; renderList();
         }
 
         function renderList() {
             const container = document.getElementById('employeeContainer');
             const pagContainer = document.getElementById('pagination');
-            container.innerHTML = '';
-            pagContainer.innerHTML = '';
+            container.innerHTML = ''; pagContainer.innerHTML = '';
 
             let filtered = employees.filter(e => {
                 const matchName = e.name.toLowerCase().includes(currentSearch);
                 const matchRole = currentFilter ? e.role === currentFilter : true;
                 return matchName && matchRole;
             });
-
             filtered.sort((a, b) => a.role.localeCompare(b.role));
 
             const totalItems = filtered.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
             if (currentPage > totalPages) currentPage = totalPages || 1;
 
             const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageItems = filtered.slice(start, end);
+            const pageItems = filtered.slice(start, start + itemsPerPage);
 
             if(pageItems.length === 0) {
                 container.innerHTML = '<p class="text-center" style="grid-column:1/-1; padding:20px;">Tidak ada pegawai ditemukan.</p>';
@@ -575,43 +446,28 @@
                     const card = document.createElement('div');
                     card.className = 'employee-card';
                     card.onclick = () => openRate(emp);
-                    card.innerHTML = `
-                        <img src="${emp.img}" class="employee-img">
-                        <span class="emp-name">${emp.name}</span>
-                        <span class="role-tag">${emp.role}</span>
-                    `;
+                    card.innerHTML = `<img src="${emp.img}" class="employee-img"><span class="emp-name">${emp.name}</span><span class="role-tag">${emp.role}</span>`;
                     container.appendChild(card);
                 });
             }
 
             if(totalPages > 1) {
-                const prev = document.createElement('button');
-                prev.className = 'page-btn';
-                prev.innerHTML = '❮';
-                prev.onclick = () => { currentPage--; renderList(); };
-                prev.disabled = currentPage === 1;
+                const prev = document.createElement('button'); prev.className = 'page-btn'; prev.innerHTML = '❮';
+                prev.onclick = () => { currentPage--; renderList(); }; prev.disabled = currentPage === 1;
                 pagContainer.appendChild(prev);
-
                 for(let i=1; i<=totalPages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
-                    btn.innerText = i;
-                    btn.onclick = () => { currentPage = i; renderList(); };
+                    const btn = document.createElement('button'); btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
+                    btn.innerText = i; btn.onclick = () => { currentPage = i; renderList(); };
                     pagContainer.appendChild(btn);
                 }
-
-                const next = document.createElement('button');
-                next.className = 'page-btn';
-                next.innerHTML = '❯';
-                next.onclick = () => { currentPage++; renderList(); };
-                next.disabled = currentPage === totalPages;
+                const next = document.createElement('button'); next.className = 'page-btn'; next.innerHTML = '❯';
+                next.onclick = () => { currentPage++; renderList(); }; next.disabled = currentPage === totalPages;
                 pagContainer.appendChild(next);
             }
         }
 
         function openRate(emp) {
-            selectedEmp = emp;
-            currentScore = 0;
+            selectedEmp = emp; currentScore = 0;
             document.getElementById('rate-img').src = emp.img;
             document.getElementById('rate-name').innerText = emp.name;
             document.getElementById('rate-role').innerText = emp.role;
@@ -621,140 +477,120 @@
 
         function selectRate(score, el) {
             currentScore = score;
-            const texts = {5:"Sangat Baik",4:"Baik",3:"Cukup",2:"Kurang Baik",1:"Sangat Buruk"};
-            currentScoreText = texts[score];
             document.querySelectorAll('.rating-option').forEach(e => e.classList.remove('selected'));
             el.classList.add('selected');
         }
 
         function submitRating() {
-            if(currentScore === 0) { 
-                showAlert("Silakan pilih ikon penilaian terlebih dahulu!", "Peringatan", "normal");
-                return; 
-            }
-
+            if(currentScore === 0) { showAlert("Silakan pilih ikon penilaian terlebih dahulu!", "Peringatan", "normal"); return; }
             const data = JSON.parse(localStorage.getItem('surveyData')) || [];
             data.push({
-                empId: selectedEmp.id,
-                empName: selectedEmp.name,
-                empRole: selectedEmp.role,
-                score: currentScore,
-                custName: currentCust.name,
-                custPhone: currentCust.phone,
-                date: new Date().toISOString()
+                empId: selectedEmp.id, empName: selectedEmp.name, empRole: selectedEmp.role, score: currentScore,
+                custName: currentCust.name, custPhone: currentCust.phone, date: new Date().toISOString()
             });
             localStorage.setItem('surveyData', JSON.stringify(data));
-
-            // ALERT HIJAU (SUKSES)
-            showAlert("Atas partisipasi Anda dalam mengisi Survei. Masukan Anda sangat bermanfaat bagi peningkatan kualitas pelayanan di Kantor Imigrasi Kelas II Non TPI Wonosobo.", "Terimakasih!", "success", function() {
-                logout(); 
+            showAlert("Penilaian berhasil disimpan. Anda dapat menilai pegawai lain atau tekan tombol Selesai jika sudah.", "Terimakasih!", "success", function() {
+                document.getElementById('searchInput').value = ""; handleSearch(); showPage('page-list');
             });
         }
 
-        function checkAdmin() {
-            document.getElementById('adminModal').style.display = 'flex';
-            document.getElementById('adminPass').value = '';
-            document.getElementById('adminPass').focus();
-        }
-        function closeAdmin() {
-            document.getElementById('adminModal').style.display = 'none';
-        }
+        function checkAdmin() { document.getElementById('adminModal').style.display = 'flex'; document.getElementById('adminPass').value = ''; document.getElementById('adminPass').focus(); }
+        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
         function loginAdmin() {
             const pass = document.getElementById('adminPass').value;
             if(pass === 'admin123') {
-                closeAdmin();
-                showAdminDashboard();
-                document.getElementById('nav-home').classList.remove('active');
-                document.getElementById('nav-admin').classList.add('active');
-            } else {
-                // ALERT MERAH (ERROR)
-                showAlert("Password Salah! Akses Ditolak.", "Gagal Login", "error");
-            }
+                closeAdmin(); showAdminDashboard();
+                document.getElementById('nav-home').classList.remove('active'); document.getElementById('nav-admin').classList.add('active');
+            } else { showAlert("Password Salah! Akses Ditolak.", "Gagal Login", "error"); }
         }
 
-        function showAdminDashboard() {
-            showPage('page-admin');
-            switchTab('weekly', document.querySelector('.tab-btn')); 
-        }
+        function showAdminDashboard() { showPage('page-admin'); switchTab('weekly', document.querySelector('.tab-btn')); }
 
         function switchTab(type, btn) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const titles = {
-                'weekly': 'Ranking Mingguan (7 Hari Terakhir)',
-                'monthly': 'Ranking Bulanan (30 Hari Terakhir)',
-                'all': 'Hasil Akhir (Keseluruhan)'
-            };
-            document.getElementById('rankTitle').innerText = titles[type];
-            renderRanking(type);
+            const rankingView = document.getElementById('rankingView');
+            const historyView = document.getElementById('historyView');
+
+            if(type === 'history') {
+                document.getElementById('rankTitle').innerText = "Riwayat Pengisi Survei";
+                rankingView.classList.remove('active-view');
+                historyView.classList.add('active-view');
+                renderHistory();
+            } else {
+                const titles = { 'weekly': 'Ranking Mingguan (7 Hari Terakhir)', 'monthly': 'Ranking Bulanan (30 Hari Terakhir)', 'all': 'Hasil Akhir (Keseluruhan)' };
+                document.getElementById('rankTitle').innerText = titles[type];
+                historyView.classList.remove('active-view');
+                rankingView.classList.add('active-view');
+                renderRanking(type);
+            }
         }
 
+        // --- FUNGSI RENDER RANKING ---
         function renderRanking(type) {
-            const tbody = document.getElementById('rankingBody');
-            tbody.innerHTML = '';
-            
+            const tbody = document.getElementById('rankingBody'); tbody.innerHTML = '';
             const rawData = JSON.parse(localStorage.getItem('surveyData')) || [];
-            if(rawData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data survei.</td></tr>';
-                return;
-            }
-
-            const now = new Date();
-            let filteredData = rawData;
+            if(rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data survei.</td></tr>'; return; }
+            const now = new Date(); let filteredData = rawData;
             
-            if(type === 'weekly') {
-                const limit = new Date(); limit.setDate(now.getDate() - 7);
-                filteredData = rawData.filter(d => new Date(d.date) >= limit);
-            } else if(type === 'monthly') {
-                const limit = new Date(); limit.setDate(now.getDate() - 30);
-                filteredData = rawData.filter(d => new Date(d.date) >= limit);
-            }
+            if(type === 'weekly') { const limit = new Date(); limit.setDate(now.getDate() - 7); filteredData = rawData.filter(d => new Date(d.date) >= limit); } 
+            else if(type === 'monthly') { const limit = new Date(); limit.setDate(now.getDate() - 30); filteredData = rawData.filter(d => new Date(d.date) >= limit); }
 
-            if(filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data dalam periode ini.</td></tr>';
-                return;
-            }
+            if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data dalam periode ini.</td></tr>'; return; }
 
             const stats = {};
             filteredData.forEach(d => {
                 if(!stats[d.empId]) stats[d.empId] = { name: d.empName, role: d.empRole, total: 0, count: 0 };
-                stats[d.empId].total += d.score;
-                stats[d.empId].count++;
+                stats[d.empId].total += d.score; stats[d.empId].count++;
             });
 
-            const rankList = Object.values(stats).map(s => ({
-                name: s.name,
-                role: s.role,
-                count: s.count,
-                avg: (s.total / s.count).toFixed(2)
-            })).sort((a, b) => b.avg - a.avg);
+            const rankList = Object.values(stats).map(s => ({ name: s.name, role: s.role, count: s.count, avg: (s.total / s.count).toFixed(2) })).sort((a, b) => b.avg - a.avg);
 
             rankList.forEach((item, idx) => {
                 const rank = idx + 1;
-                let rankClass = `rank-${rank}`; 
-                if(rank > 3) rankClass = 'rank-other';
-                let scoreColor = '#dc2626'; 
-                if(item.avg >= 4.5) scoreColor = '#16a34a';
-                else if(item.avg >= 3) scoreColor = '#ca8a04'; 
-
-                const row = `
+                let rankClass = rank > 3 ? 'rank-other' : `rank-${rank}`;
+                let scoreColor = item.avg >= 4.5 ? '#16a34a' : (item.avg >= 3 ? '#ca8a04' : '#dc2626');
+                tbody.innerHTML += `
                     <tr class="${rankClass}">
                         <td><div class="rank-num">${rank}</div></td>
                         <td><strong>${item.name}</strong></td>
                         <td style="color:var(--text-light); font-size:0.9rem;">${item.role}</td>
                         <td class="text-center">${item.count}</td>
                         <td class="text-center" style="color:${scoreColor}; font-weight:bold;">${item.avg}</td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+                    </tr>`;
+            });
+        }
+
+        // --- FUNGSI RENDER RIWAYAT (BARU) ---
+        function renderHistory() {
+            const tbody = document.getElementById('historyBody'); tbody.innerHTML = '';
+            const rawData = JSON.parse(localStorage.getItem('surveyData')) || [];
+            
+            if(rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada riwayat survei.</td></tr>'; return; }
+
+            // Urutkan dari yang terbaru (descending date)
+            rawData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            rawData.forEach(d => {
+                const dateObj = new Date(d.date);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+                let scoreColor = d.score >= 4 ? '#16a34a' : (d.score === 3 ? '#ca8a04' : '#dc2626');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="history-date">${dateStr}</td>
+                        <td><strong>${d.custName}</strong></td>
+                        <td class="history-phone">${d.custPhone}</td>
+                        <td>${d.empName}</td>
+                        <td class="text-center" style="color:${scoreColor}; font-weight:bold;">${d.score}</td>
+                    </tr>`;
             });
         }
 
         function askClearData() {
             showConfirm("PERINGATAN: Apakah Anda yakin menghapus semua data? Tindakan ini permanen.", function() {
-                localStorage.removeItem('surveyData');
-                renderRanking('weekly'); 
+                localStorage.removeItem('surveyData'); renderRanking('weekly'); renderHistory(); 
                 showAlert("Semua data berhasil dihapus.", "Informasi", "normal");
             });
         }
