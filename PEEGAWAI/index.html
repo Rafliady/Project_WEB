@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKPI - Sistem Kepuasan Pelayanan</title>
+    <title>SiPeLan - Survei Penilaian Petugas Pelayanan</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -41,7 +41,7 @@
         .nav-menu button:hover { color: var(--primary-dark); }
 
         /* Container */
-        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; } /* Lebar container diperbesar sedikit untuk tabel */
         
         /* Pages Animation */
         .page { display: none; animation: fadeIn 0.4s ease-out; }
@@ -142,6 +142,7 @@
         .rank-2 .rank-num { background: #e2e8f0; color: #475569; }
         .rank-3 .rank-num { background: #fed7aa; color: #9a3412; }
         .text-center { text-align: center; }
+        .nowrap { white-space: nowrap; }
         
         /* Utility untuk view admin */
         .admin-view { display: none; }
@@ -154,7 +155,7 @@
 <body>
 
     <nav>
-        <div class="nav-brand">⭐ SKPI - Sistem Kepuasan Pelayanan</div>
+        <div class="nav-brand">⭐ SiPeLan - Survei Penilaian Petugas Pelayanan</div>
         <div class="nav-menu">
             <button onclick="goToHome()" id="nav-home" class="active">Survei</button>
             <button onclick="checkAdmin()" id="nav-admin">🔒 Admin Dashboard</button>
@@ -197,7 +198,7 @@
         <div id="page-login" class="page active">
             <div class="full-screen-bg"></div>
             <div style="padding-top: 4rem;">
-                <h1 class="hero-title">Survei Kepuasan Pegawai Imigrasi</h1>
+                <h1 class="hero-title">Survei Penilaian Petugas Pelayanan</h1>
                 <p class="hero-desc">Ayo turut berperan dalam meningkatkan kinerja pegawai Imigrasi. Isi Survei Penilaian Pegawai untuk pelayanan yang lebih baik. Isi Survei Sekarang!</p>
                 <div class="login-card">
                     <h3 class="text-center" style="margin-top:0;">Isi Data Pemohon</h3>
@@ -270,11 +271,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th width="10%">Rank</th>
+                                <th width="8%">Rank</th>
                                 <th>Nama Pegawai</th>
                                 <th>Jabatan</th>
+                                <th>Rincian (Per Orang)</th>
+                                <th class="text-center">Total Poin</th>
                                 <th class="text-center">Survei</th>
-                                <th class="text-center">Skor (1-5)</th>
+                                <th class="text-center nowrap">Skor Akumulasi (1-5)</th>
                             </tr>
                         </thead>
                         <tbody id="rankingBody"></tbody>
@@ -527,25 +530,32 @@
             }
         }
 
-        // --- FUNGSI RENDER RANKING ---
+        // --- FUNGSI RENDER RANKING (DIPERBARUI DENGAN RINCIAN NILAI TERPISAH) ---
         function renderRanking(type) {
             const tbody = document.getElementById('rankingBody'); tbody.innerHTML = '';
             const rawData = JSON.parse(localStorage.getItem('surveyData')) || [];
-            if(rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada data survei.</td></tr>'; return; }
+            if(rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="text-center">Belum ada data survei.</td></tr>'; return; }
             const now = new Date(); let filteredData = rawData;
             
             if(type === 'weekly') { const limit = new Date(); limit.setDate(now.getDate() - 7); filteredData = rawData.filter(d => new Date(d.date) >= limit); } 
             else if(type === 'monthly') { const limit = new Date(); limit.setDate(now.getDate() - 30); filteredData = rawData.filter(d => new Date(d.date) >= limit); }
 
-            if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Tidak ada data dalam periode ini.</td></tr>'; return; }
+            if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="text-center">Tidak ada data dalam periode ini.</td></tr>'; return; }
 
             const stats = {};
             filteredData.forEach(d => {
-                if(!stats[d.empId]) stats[d.empId] = { name: d.empName, role: d.empRole, total: 0, count: 0 };
-                stats[d.empId].total += d.score; stats[d.empId].count++;
+                if(!stats[d.empId]) stats[d.empId] = { name: d.empName, role: d.empRole, total: 0, count: 0, scores: [] };
+                stats[d.empId].total += d.score;
+                stats[d.empId].count++;
+                stats[d.empId].scores.push(d.score);
             });
 
-            const rankList = Object.values(stats).map(s => ({ name: s.name, role: s.role, count: s.count, avg: (s.total / s.count).toFixed(2) })).sort((a, b) => b.avg - a.avg);
+            const rankList = Object.values(stats).map(s => ({
+                name: s.name, role: s.role, count: s.count,
+                avg: (s.total / s.count).toFixed(2),
+                rawScores: s.scores.join(', '), 
+                totalSum: s.total
+            })).sort((a, b) => b.avg - a.avg);
 
             rankList.forEach((item, idx) => {
                 const rank = idx + 1;
@@ -556,20 +566,21 @@
                         <td><div class="rank-num">${rank}</div></td>
                         <td><strong>${item.name}</strong></td>
                         <td style="color:var(--text-light); font-size:0.9rem;">${item.role}</td>
+                        <td style="font-size:0.85rem; color:#64748b;">${item.rawScores}</td>
+                        <td class="text-center" style="color:#4f46e5; font-weight:bold;">${item.totalSum}</td>
                         <td class="text-center">${item.count}</td>
                         <td class="text-center" style="color:${scoreColor}; font-weight:bold;">${item.avg}</td>
                     </tr>`;
             });
         }
 
-        // --- FUNGSI RENDER RIWAYAT (BARU) ---
+        // --- FUNGSI RENDER RIWAYAT ---
         function renderHistory() {
             const tbody = document.getElementById('historyBody'); tbody.innerHTML = '';
             const rawData = JSON.parse(localStorage.getItem('surveyData')) || [];
             
             if(rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada riwayat survei.</td></tr>'; return; }
 
-            // Urutkan dari yang terbaru (descending date)
             rawData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             rawData.forEach(d => {
