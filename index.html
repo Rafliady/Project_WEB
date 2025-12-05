@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiPeLan - Survei Penilaian Petugas Pelayanan</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #eab308;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .nav-brand { font-weight: 800; font-size: 1.4rem; color: var(--primary); letter-spacing: -0.5px; }
+        .nav-menu button {
+            background: none; border: none; cursor: pointer; color: var(--text-light); font-weight: 600; margin-left: 15px; transition: 0.2s;
+        }
+        .nav-menu button.active { color: var(--primary); }
+        .nav-menu button:hover { color: var(--primary-dark); }
+
+        /* Container */
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        
+        /* Pages Animation */
+        .page { display: none; animation: fadeIn 0.4s ease-out; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards & Layout */
+        .card { background: var(--card); padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); text-align: center; }
+
+        /* FULL SCREEN BACKGROUND */
+        .full-screen-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('kantor imigrasi.jpg'); 
+            background-size: cover; background-position: center; z-index: -1;
+        }
+        
+        .hero-title { font-size: 3rem; margin-bottom: 15px; font-weight: 800; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center; }
+        .hero-desc { font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); text-align: center; margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+        
+        .login-card {
+            background: white; border-radius: 16px; padding: 2.5rem; max-width: 450px; margin: 0 auto;
+            position: relative; z-index: 10; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); color: var(--text);
+        }
+
+        /* Forms */
+        input, select { width: 100%; padding: 12px 16px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+        /* Buttons */
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 600; transition: 0.2s; }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: #eef2ff; }
+        .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid var(--danger); width: auto; padding: 8px 16px; font-size: 0.9rem; }
+        .btn-danger:hover { background: var(--danger); color: white; }
+        .btn-small { padding: 6px 12px; font-size: 0.8rem; margin-right: 5px; width: auto; display: inline-block; margin-top: 0;}
+
+        /* Search & Filter Bar */
+        .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-box { flex: 2; position: relative; }
+        .filter-box { flex: 1; min-width: 150px; }
+
+        /* Employee Grid */
+        .employee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .employee-card {
+            background: white; border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s; 
+            border: 2px solid transparent; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .employee-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .role-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.75rem; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 5px; }
+        .employee-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; background: #e0e7ff; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .emp-name { font-weight: 700; display: block; color: var(--text); margin-bottom: 2px; }
+
+        /* Pagination */
+        .pagination { display: flex; justify-content: center; gap: 5px; margin-top: 30px; }
+        .page-btn { width: 40px; height: 40px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 600; transition: 0.2s; }
+        .page-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Rating UI */
+        .rating-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .rating-option { display: flex; align-items: center; padding: 15px 20px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.2s; background: white; }
+        .rating-option:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .rating-option.selected { border-color: var(--primary); background: #eef2ff; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
+        .rating-emoji { font-size: 1.8rem; margin-right: 15px; }
+        .rating-text { font-weight: 600; font-size: 1.1rem; }
+
+        /* CUSTOM MODALS */
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(3px); }
+        .custom-modal-box { background: white; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .custom-modal-box.success-modal { background: #22c55e; color: white; }
+        .custom-modal-box.success-modal h3, .custom-modal-box.success-modal p { color: white !important; }
+        .custom-modal-box.success-modal .btn { background: white; color: #22c55e; font-weight: bold; }
+        .custom-modal-box.error-modal { background: #ef4444; color: white; }
+        .custom-modal-box.error-modal h3, .custom-modal-box.error-modal p { color: white !important; }
+        .custom-modal-box.error-modal .btn { background: white; color: #ef4444; font-weight: bold; }
+        .custom-modal-icon { font-size: 4rem; margin-bottom: 10px; display: block; }
+        
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-20px);} 60% {transform: translateY(-10px);} }
+        .icon-bounce { animation: bounce 1.5s infinite; }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        .icon-shake { animation: shake 0.5s infinite; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Admin Dashboard UI */
+        .admin-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px); }
+        .modal-content { background: white; padding: 2rem; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .tabs { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; overflow-x: auto; }
+        .tab-btn { padding: 12px 20px; background: none; border: none; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; background: #f8fafc; color: var(--text-light); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .rank-num { font-weight: bold; width: 30px; height: 30px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .rank-1 .rank-num { background: #fef08a; color: #854d0e; }
+        .rank-2 .rank-num { background: #e2e8f0; color: #475569; }
+        .rank-3 .rank-num { background: #fed7aa; color: #9a3412; }
+        .text-center { text-align: center; }
+        .nowrap { white-space: nowrap; }
+        
+        /* Utility untuk view admin */
+        .admin-view { display: none; }
+        .admin-view.active-view { display: block; animation: fadeIn 0.3s; }
+        
+        .history-date { font-size: 0.8rem; color: #64748b; }
+        .history-phone { font-size: 0.85rem; color: #4f46e5; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">⭐ SiPeLan - Survei Penilaian Petugas Pelayanan</div>
+        <div class="nav-menu">
+            <button onclick="goToHome()" id="nav-home" class="active">Survei</button>
+            <button onclick="checkAdmin()" id="nav-admin">🔒 Admin Dashboard</button>
+        </div>
+    </nav>
+
+    <!-- Modal Login Admin -->
+    <div id="adminModal" class="admin-modal">
+        <div class="modal-content">
+            <h3>Login Admin</h3>
+            <p style="color:var(--text-light); margin-bottom:15px;">Masukkan password untuk melihat hasil.</p>
+            <input type="password" id="adminPass" placeholder="Masukkan Password">
+            <button onclick="loginAdmin()" class="btn">Masuk</button>
+            <button onclick="closeAdmin()" class="btn btn-outline" style="border:none; margin-top:5px;">Batal</button>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Pegawai -->
+    <div id="employeeModal" class="admin-modal">
+        <div class="modal-content">
+            <h3 id="modalEmpTitle">Tambah Pegawai</h3>
+            <form id="formEmployee" style="text-align: left; margin-top: 15px;">
+                <input type="hidden" id="empIdInput">
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.9rem; font-weight:bold;">Nama Pegawai</label>
+                    <input type="text" id="empNameInput" placeholder="Nama Lengkap" required>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.9rem; font-weight:bold;">Jabatan</label>
+                    <input type="text" id="empRoleInput" placeholder="Contoh: Teller" required>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <label style="font-size:0.9rem; font-weight:bold;">Link Foto (Opsional)</label>
+                    <input type="text" id="empImgInput" placeholder="URL Gambar / Nama File">
+                </div>
+                <button type="submit" class="btn">Simpan</button>
+                <button type="button" onclick="closeEmpModal()" class="btn btn-outline" style="border:none; margin-top:5px;">Batal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Alert -->
+    <div id="customAlert" class="custom-modal-overlay">
+        <div id="alertBox" class="custom-modal-box">
+            <span id="alertIcon" class="custom-modal-icon">🔔</span>
+            <h3 id="customAlertTitle">Notifikasi</h3>
+            <p id="customAlertMsg" style="color:#64748b; margin-bottom:20px;">Pesan...</p>
+            <button id="customAlertBtn" class="btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Custom Confirm -->
+    <div id="customConfirm" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <span class="custom-modal-icon" style="font-size:3rem;">⚠️</span>
+            <h3>Konfirmasi</h3>
+            <p id="customConfirmMsg" style="color:#64748b; margin-bottom:20px;">Apakah anda yakin?</p>
+            <div style="display:flex; gap:10px;">
+                <button id="customConfirmYes" class="btn btn-danger">Ya, Lanjutkan</button>
+                <button onclick="closeConfirm()" class="btn btn-outline" style="margin-top:15px; border-color:#cbd5e1; color:#64748b;">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <!-- HALAMAN 1: LOGIN PELANGGAN -->
+        <div id="page-login" class="page active">
+            <div class="full-screen-bg"></div>
+            <div style="padding-top: 4rem;">
+                <h1 class="hero-title">Survei Penilaian Petugas Pelayanan</h1>
+                <p class="hero-desc">Ayo turut berperan dalam meningkatkan kinerja pegawai Imigrasi. Isi Survei Penilaian Pegawai untuk pelayanan yang lebih baik. Isi Survei Sekarang!</p>
+                <div class="login-card">
+                    <h3 class="text-center" style="margin-top:0;">Isi Data Pemohon</h3>
+                    <p class="text-center" style="color:var(--text-light); font-size:0.9rem;">Data Anda rahasia dan hanya untuk keperluan validasi.</p>
+                    <form id="loginForm">
+                        <input type="text" id="custName" placeholder="Masukkan Nama Lengkap" required>
+                        <input type="tel" id="custPhone" placeholder="Masukkan Nomor Handphone" required pattern="[0-9]{10,13}">
+                        <button type="submit" class="btn">Mulai Penilaian</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- HALAMAN 2: DAFTAR PEGAWAI -->
+        <div id="page-list" class="page">
+            <div class="text-center" style="margin-bottom: 25px;">
+                <h3>Halo, <span id="displayName"></span>!</h3>
+                <p style="color:var(--text-light);">Silakan pilih pegawai untuk dinilai:</p>
+            </div>
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Cari nama pegawai..." oninput="handleSearch()">
+                </div>
+                <div class="filter-box">
+                    <select id="roleFilter" onchange="handleSearch()">
+                        <option value="">Semua Jabatan</option>
+                    </select>
+                </div>
+            </div>
+            <div id="employeeContainer" class="employee-grid"></div>
+            <div id="pagination" class="pagination"></div>
+            <button onclick="logout()" class="btn btn-outline" style="margin-top: 30px;">Selesai / Keluar</button>
+        </div>
+
+        <!-- HALAMAN 3: PENILAIAN -->
+        <div id="page-rate" class="page">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <button onclick="showPage('page-list')" style="float:left; background:none; border:none; cursor:pointer; font-size:1.5rem;">⬅️</button>
+                <img id="rate-img" src="" class="employee-img" style="width: 120px; height: 120px;">
+                <h2 id="rate-name" style="margin-bottom: 5px;">Nama</h2>
+                <span id="rate-role" class="role-tag" style="font-size: 1rem;">Jabatan</span>
+                <hr style="border:0; border-top:1px solid #e2e8f0; margin: 25px 0;">
+                <p style="font-weight:600; font-size:1.1rem;">Bagaimana pelayanan pegawai ini?</p>
+                <div class="rating-container">
+                    <div class="rating-option" onclick="selectRate(5, this)"><span class="rating-emoji">🤩</span> <span class="rating-text">Sangat Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(4, this)"><span class="rating-emoji">😊</span> <span class="rating-text">Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(3, this)"><span class="rating-emoji">😐</span> <span class="rating-text">Cukup</span></div>
+                    <div class="rating-option" onclick="selectRate(2, this)"><span class="rating-emoji">😞</span> <span class="rating-text">Kurang Baik</span></div>
+                    <div class="rating-option" onclick="selectRate(1, this)"><span class="rating-emoji">😡</span> <span class="rating-text">Sangat Buruk</span></div>
+                </div>
+                <button onclick="submitRating()" class="btn" style="margin-top: 25px;">Kirim Penilaian</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 4: ADMIN DASHBOARD -->
+        <div id="page-admin" class="page">
+            <div class="card" style="text-align: left;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2>📊 Dashboard Admin</h2>
+                    <button onclick="askClearData()" class="btn-danger">Reset Semua Data</button>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('weekly', this)">📅 Mingguan</button>
+                    <button class="tab-btn" onclick="switchTab('monthly', this)">🗓️ Bulanan</button>
+                    <button class="tab-btn" onclick="switchTab('all', this)">🏆 Hasil Akhir</button>
+                    <button class="tab-btn" onclick="switchTab('history', this)">📜 Riwayat</button>
+                    <button class="tab-btn" onclick="switchTab('manage', this)">👥 Kelola Pegawai</button>
+                </div>
+
+                <h4 id="rankTitle" style="color:var(--text-light); margin-top:0;">Ranking Mingguan</h4>
+                
+                <!-- TAB RANKING -->
+                <div id="rankingView" class="admin-view active-view" style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="8%">Rank</th>
+                                <th>Nama Pegawai</th>
+                                <th>Jabatan</th>
+                                <th>Rincian (Per Orang)</th>
+                                <th class="text-center">Total Poin</th>
+                                <th class="text-center">Survei</th>
+                                <th class="text-center nowrap">Skor Akumulasi (1-5)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rankingBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- TAB RIWAYAT -->
+                <div id="historyView" class="admin-view" style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Waktu</th>
+                                <th>Nama Pengunjung</th>
+                                <th>No. HP</th>
+                                <th>Menilai</th>
+                                <th class="text-center">Skor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- TAB KELOLA PEGAWAI -->
+                <div id="manageView" class="admin-view">
+                    <button onclick="openAddEmp()" class="btn" style="width:auto; margin-bottom:15px;">+ Tambah Pegawai</button>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Pegawai</th>
+                                    <th>Jabatan</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manageBody">
+                                <!-- Data injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <br>
+                <button onclick="goToHome()" class="btn btn-outline">Keluar dari Admin</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- HELPER UNTUK CUSTOM ALERT/CONFIRM ---
+        function showAlert(message, title="Notifikasi", type="normal", callback=null) {
+            const box = document.getElementById('alertBox');
+            const icon = document.getElementById('alertIcon');
+            box.className = 'custom-modal-box'; icon.className = 'custom-modal-icon';
+            if(type === 'success') { box.classList.add('success-modal'); icon.innerText = '🙏'; icon.classList.add('icon-bounce'); } 
+            else if (type === 'error') { box.classList.add('error-modal'); icon.innerText = '❌'; icon.classList.add('icon-shake'); } 
+            else { icon.innerText = '🔔'; }
+
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertMsg').innerText = message;
+            document.getElementById('customAlert').style.display = 'flex';
+            
+            const btn = document.getElementById('customAlertBtn');
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.onclick = function() { document.getElementById('customAlert').style.display = 'none'; if(callback) callback(); };
+        }
+
+        function showConfirm(message, yesCallback) {
+            document.getElementById('customConfirmMsg').innerText = message;
+            document.getElementById('customConfirm').style.display = 'flex';
+            const btn = document.getElementById('customConfirmYes');
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+            newBtn.onclick = function() { document.getElementById('customConfirm').style.display = 'none'; if(yesCallback) yesCallback(); };
+        }
+        function closeConfirm() { document.getElementById('customConfirm').style.display = 'none'; }
+
+        // --- DATA PEGAWAI (DINAMIS DARI DB) ---
+        let employees = []; 
+
+        let currentCust = null;
+        let selectedEmp = null;
+        let currentScore = 0;
+        let currentPage = 1;
+        const itemsPerPage = 12; 
+        let currentSearch = "";
+        let currentFilter = "";
+
+        // SAAT LOAD, AMBIL DATA PEGAWAI DARI DB
+        window.onload = () => { 
+            fetchEmployees(function() {
+                populateFilter();
+                renderList(); 
+            });
+        };
+
+        // --- FUNGSI AMBIL DATA PEGAWAI DARI DB (Backend: read_pegawai.php) ---
+        function fetchEmployees(callback = null) {
+            fetch('read_pegawai.php')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    employees = data.map(e => ({
+                        id: parseInt(e.id),
+                        name: e.name,
+                        role: e.role,
+                        img: e.img
+                    }));
+                } else {
+                    employees = [];
+                }
+                
+                if(callback) callback();
+                
+                if(document.getElementById('manageView').classList.contains('active-view')) {
+                    renderManageTable();
+                }
+            })
+            .catch(err => {
+                console.error("Gagal load pegawai:", err);
+                showAlert("Gagal memuat data pegawai dari server.", "Error", "error");
+            });
+        }
+
+        // --- MANAJEMEN PEGAWAI (CRUD UI) ---
+        
+        function openAddEmp() {
+            document.getElementById('modalEmpTitle').innerText = "Tambah Pegawai";
+            document.getElementById('empIdInput').value = "";
+            document.getElementById('formEmployee').reset();
+            document.getElementById('employeeModal').style.display = 'flex';
+        }
+
+        function closeEmpModal() {
+            document.getElementById('employeeModal').style.display = 'none';
+        }
+
+        function editEmp(id) {
+            const emp = employees.find(e => e.id === id);
+            if(emp) {
+                document.getElementById('modalEmpTitle').innerText = "Edit Pegawai";
+                document.getElementById('empIdInput').value = emp.id;
+                document.getElementById('empNameInput').value = emp.name;
+                document.getElementById('empRoleInput').value = emp.role;
+                document.getElementById('empImgInput').value = emp.img;
+                document.getElementById('employeeModal').style.display = 'flex';
+            }
+        }
+
+        // --- SIMPAN PEGAWAI (CREATE / UPDATE) ---
+        document.getElementById('formEmployee').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('empIdInput').value;
+            const name = document.getElementById('empNameInput').value;
+            const role = document.getElementById('empRoleInput').value;
+            const img = document.getElementById('empImgInput').value || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + encodeURIComponent(name);
+
+            const payload = { id, name, role, img };
+            const endpoint = id ? 'update_pegawai.php' : 'create_pegawai.php';
+            
+            fetch(endpoint, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload) 
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    const msg = id ? "Data pegawai diperbarui" : "Pegawai baru ditambahkan";
+                    showAlert(msg, "Sukses", "success");
+                    closeEmpModal();
+                    
+                    fetchEmployees(function() {
+                        populateFilter();
+                        renderList(); 
+                    });
+                } else {
+                    showAlert("Gagal menyimpan data pegawai.", "Error", "error");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showAlert("Terjadi kesalahan server.", "Error", "error");
+            });
+        });
+
+        // --- HAPUS PEGAWAI (DELETE) ---
+        function deleteEmp(id) {
+            showConfirm("Yakin ingin menghapus pegawai ini?", function() {
+                fetch('delete_pegawai.php', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({id}) 
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === 'success') {
+                        showAlert("Pegawai berhasil dihapus.", "Info", "normal");
+                        fetchEmployees(function() {
+                            populateFilter();
+                            renderList();
+                        });
+                    } else {
+                        showAlert("Gagal menghapus pegawai.", "Error", "error");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    showAlert("Terjadi kesalahan server.", "Error", "error");
+                });
+            });
+        }
+
+        function renderManageTable() {
+            const tbody = document.getElementById('manageBody');
+            tbody.innerHTML = '';
+            
+            if (employees.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Belum ada data pegawai.</td></tr>';
+                return;
+            }
+
+            employees.forEach(emp => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${emp.id}</td>
+                        <td>${emp.name}</td>
+                        <td>${emp.role}</td>
+                        <td class="text-center">
+                            <button onclick="editEmp(${emp.id})" class="btn btn-small btn-outline">✏️ Edit</button>
+                            <button onclick="deleteEmp(${emp.id})" class="btn btn-small btn-danger">🗑️ Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- NAVIGASI & UI ---
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function goToHome() {
+            if(currentCust) {
+                showPage('page-list');
+                document.getElementById('nav-home').classList.add('active');
+                document.getElementById('nav-admin').classList.remove('active');
+            } else {
+                showPage('page-login');
+                document.getElementById('nav-home').classList.add('active');
+                document.getElementById('nav-admin').classList.remove('active');
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            currentCust = { name, phone };
+            document.getElementById('displayName').innerText = name;
+            currentPage = 1; currentSearch = ""; currentFilter = "";
+            document.getElementById('searchInput').value = "";
+            document.getElementById('roleFilter').value = "";
+            renderList(); showPage('page-list');
+        });
+
+        function logout() {
+            currentCust = null;
+            document.getElementById('loginForm').reset();
+            showPage('page-login');
+        }
+
+        function populateFilter() {
+            const roles = [...new Set(employees.map(e => e.role))].sort();
+            const select = document.getElementById('roleFilter');
+            select.innerHTML = '<option value="">Semua Jabatan</option>'; 
+            roles.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r; opt.innerText = r; select.appendChild(opt);
+            });
+        }
+
+        function handleSearch() {
+            currentSearch = document.getElementById('searchInput').value.toLowerCase();
+            currentFilter = document.getElementById('roleFilter').value;
+            currentPage = 1; renderList();
+        }
+
+        function renderList() {
+            const container = document.getElementById('employeeContainer');
+            const pagContainer = document.getElementById('pagination');
+            container.innerHTML = ''; pagContainer.innerHTML = '';
+
+            if (employees.length === 0) {
+                container.innerHTML = '<p class="text-center" style="grid-column:1/-1; padding:20px;">Memuat data pegawai...</p>';
+                return;
+            }
+
+            let filtered = employees.filter(e => {
+                const matchName = e.name.toLowerCase().includes(currentSearch);
+                const matchRole = currentFilter ? e.role === currentFilter : true;
+                return matchName && matchRole;
+            });
+            filtered.sort((a, b) => a.role.localeCompare(b.role));
+
+            const totalItems = filtered.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages || 1;
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const pageItems = filtered.slice(start, start + itemsPerPage);
+
+            if(pageItems.length === 0) {
+                container.innerHTML = '<p class="text-center" style="grid-column:1/-1; padding:20px;">Tidak ada pegawai ditemukan.</p>';
+            } else {
+                pageItems.forEach(emp => {
+                    const card = document.createElement('div');
+                    card.className = 'employee-card';
+                    card.onclick = () => openRate(emp);
+                    card.innerHTML = `<img src="${emp.img}" class="employee-img"><span class="emp-name">${emp.name}</span><span class="role-tag">${emp.role}</span>`;
+                    container.appendChild(card);
+                });
+            }
+
+            if(totalPages > 1) {
+                const prev = document.createElement('button'); prev.className = 'page-btn'; prev.innerHTML = '❮';
+                prev.onclick = () => { currentPage--; renderList(); }; prev.disabled = currentPage === 1;
+                pagContainer.appendChild(prev);
+                for(let i=1; i<=totalPages; i++) {
+                    const btn = document.createElement('button'); btn.className = `page-btn ${currentPage === i ? 'active' : ''}`;
+                    btn.innerText = i; btn.onclick = () => { currentPage = i; renderList(); };
+                    pagContainer.appendChild(btn);
+                }
+                const next = document.createElement('button'); next.className = 'page-btn'; next.innerHTML = '❯';
+                next.onclick = () => { currentPage++; renderList(); }; next.disabled = currentPage === totalPages;
+                pagContainer.appendChild(next);
+            }
+        }
+
+        function openRate(emp) {
+            selectedEmp = emp; currentScore = 0;
+            document.getElementById('rate-img').src = emp.img;
+            document.getElementById('rate-name').innerText = emp.name;
+            document.getElementById('rate-role').innerText = emp.role;
+            document.querySelectorAll('.rating-option').forEach(el => el.classList.remove('selected'));
+            showPage('page-rate');
+        }
+
+        function selectRate(score, el) {
+            currentScore = score;
+            document.querySelectorAll('.rating-option').forEach(e => e.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // --- MENGIRIM DATA SURVEI KE SERVER (save.php) ---
+        function submitRating() {
+            if(currentScore === 0) { showAlert("Silakan pilih ikon penilaian terlebih dahulu!", "Peringatan", "normal"); return; }
+            
+            const payload = {
+                empId: selectedEmp.id,
+                empName: selectedEmp.name,
+                empRole: selectedEmp.role,
+                score: currentScore,
+                custName: currentCust.name,
+                custPhone: currentCust.phone
+            };
+
+            fetch('save.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result.status === 'success') {
+                    showAlert("Penilaian berhasil disimpan ke Server.", "Terimakasih!", "success", function() {
+                        document.getElementById('searchInput').value = ""; handleSearch(); showPage('page-list');
+                    });
+                } else {
+                    showAlert("Gagal menyimpan data ke database.", "Error", "error");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showAlert("Terjadi kesalahan koneksi server.", "Error", "error");
+            });
+        }
+
+        function checkAdmin() { document.getElementById('adminModal').style.display = 'flex'; document.getElementById('adminPass').value = ''; document.getElementById('adminPass').focus(); }
+        function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
+        function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === 'admin123') {
+                closeAdmin(); showAdminDashboard();
+                document.getElementById('nav-home').classList.remove('active'); document.getElementById('nav-admin').classList.add('active');
+            } else { showAlert("Password Salah! Akses Ditolak.", "Gagal Login", "error"); }
+        }
+
+        // --- FUNGSI AMBIL DATA LAPORAN (get.php) ---
+        function loadDataFromServer(callback) {
+            fetch('get.php')
+            .then(response => response.json())
+            .then(serverData => {
+                const formattedData = serverData.map(item => ({
+                    empId: parseInt(item.emp_id),
+                    empName: item.emp_name,
+                    empRole: item.emp_role,
+                    custName: item.cust_name,
+                    custPhone: item.cust_phone,
+                    score: parseInt(item.score),
+                    date: item.created_at
+                }));
+                callback(formattedData);
+            })
+            .catch(err => {
+                console.error("Gagal load data:", err);
+                showAlert("Gagal mengambil data dari server.", "Error", "error");
+            });
+        }
+
+        function showAdminDashboard() { showPage('page-admin'); switchTab('weekly', document.querySelector('.tab-btn')); }
+
+        function switchTab(type, btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const rankingView = document.getElementById('rankingView');
+            const historyView = document.getElementById('historyView');
+            const manageView = document.getElementById('manageView');
+
+            rankingView.classList.remove('active-view');
+            historyView.classList.remove('active-view');
+            manageView.classList.remove('active-view');
+
+            if(type === 'manage') {
+                document.getElementById('rankTitle').innerText = "Manajemen Data Pegawai";
+                manageView.classList.add('active-view');
+                fetchEmployees(function() {
+                    renderManageTable();
+                });
+            } else {
+                loadDataFromServer(function(data) {
+                    if(type === 'history') {
+                        document.getElementById('rankTitle').innerText = "Riwayat Pengisi Survei";
+                        historyView.classList.add('active-view');
+                        renderHistory(data);
+                    } else {
+                        const titles = { 'weekly': 'Ranking Mingguan (7 Hari Terakhir)', 'monthly': 'Ranking Bulanan (30 Hari Terakhir)', 'all': 'Hasil Akhir (Keseluruhan)' };
+                        document.getElementById('rankTitle').innerText = titles[type];
+                        rankingView.classList.add('active-view');
+                        renderRanking(type, data);
+                    }
+                });
+            }
+        }
+
+        function renderRanking(type, rawData) {
+            const tbody = document.getElementById('rankingBody'); tbody.innerHTML = '';
+            if(!rawData || rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="text-center">Belum ada data survei.</td></tr>'; return; }
+            
+            const now = new Date(); let filteredData = rawData;
+            
+            if(type === 'weekly') { const limit = new Date(); limit.setDate(now.getDate() - 7); filteredData = rawData.filter(d => new Date(d.date) >= limit); } 
+            else if(type === 'monthly') { const limit = new Date(); limit.setDate(now.getDate() - 30); filteredData = rawData.filter(d => new Date(d.date) >= limit); }
+
+            if(filteredData.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="text-center">Tidak ada data dalam periode ini.</td></tr>'; return; }
+
+            const stats = {};
+            filteredData.forEach(d => {
+                if(!stats[d.empId]) stats[d.empId] = { name: d.empName, role: d.empRole, total: 0, count: 0, scores: [] };
+                stats[d.empId].total += d.score;
+                stats[d.empId].count++;
+                stats[d.empId].scores.push(d.score);
+            });
+
+            const rankList = Object.values(stats).map(s => ({
+                name: s.name, role: s.role, count: s.count,
+                avg: (s.total / s.count).toFixed(2),
+                rawScores: s.scores.join(', '), 
+                totalSum: s.total
+            })).sort((a, b) => b.avg - a.avg);
+
+            rankList.forEach((item, idx) => {
+                const rank = idx + 1;
+                let rankClass = rank > 3 ? 'rank-other' : `rank-${rank}`;
+                let scoreColor = item.avg >= 4.5 ? '#16a34a' : (item.avg >= 3 ? '#ca8a04' : '#dc2626');
+                tbody.innerHTML += `
+                    <tr class="${rankClass}">
+                        <td><div class="rank-num">${rank}</div></td>
+                        <td><strong>${item.name}</strong></td>
+                        <td style="color:var(--text-light); font-size:0.9rem;">${item.role}</td>
+                        <td style="font-size:0.85rem; color:#64748b;">${item.rawScores}</td>
+                        <td class="text-center" style="color:#4f46e5; font-weight:bold;">${item.totalSum}</td>
+                        <td class="text-center">${item.count}</td>
+                        <td class="text-center" style="color:${scoreColor}; font-weight:bold;">${item.avg}</td>
+                    </tr>`;
+            });
+        }
+
+        function renderHistory(rawData) {
+            const tbody = document.getElementById('historyBody'); tbody.innerHTML = '';
+            if(!rawData || rawData.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center">Belum ada riwayat survei.</td></tr>'; return; }
+
+            rawData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            rawData.forEach(d => {
+                const dateObj = new Date(d.date);
+                const dateStr = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+                let scoreColor = d.score >= 4 ? '#16a34a' : (d.score === 3 ? '#ca8a04' : '#dc2626');
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="history-date">${dateStr}</td>
+                        <td><strong>${d.custName}</strong></td>
+                        <td class="history-phone">${d.custPhone}</td>
+                        <td>${d.empName}</td>
+                        <td class="text-center" style="color:${scoreColor}; font-weight:bold;">${d.score}</td>
+                    </tr>`;
+            });
+        }
+
+        function askClearData() {
+            showConfirm("PERINGATAN: Menghapus data server memerlukan akses database langsung. Hubungi admin IT untuk reset database.", function() {
+                showAlert("Fitur reset via web dinonaktifkan demi keamanan data server.", "Info", "normal");
+            });
+        }
+    </script>
+</body>
+</html>
